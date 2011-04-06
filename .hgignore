@@ -1,0 +1,4 @@
+syntax: glob
+
+.sass-cache
+*.swp

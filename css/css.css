@@ -1,0 +1,131 @@
+body {
+  background: #282624;
+  color: #eee;
+  font-family: Verdana, sans-serif;
+  font-size: 14px;
+}
+
+html {
+  overflow: hidden;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.listbox {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+.listbox h2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  margin: 0;
+  padding: 0;
+  background: #9c6c3c;
+  font: bold 20px/40px Helvetica, sans-serif;
+  text-align: center;
+  border-right: 1px solid #af7f4f;
+}
+.listbox .listbox-contents {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-right: 1px solid #444240;
+  overflow-y: auto;
+  background: #282624;
+}
+
+.list-item-container {
+  cursor: default;
+  background: #282624;
+}
+.list-item-container:focus {
+  background: #393735;
+}
+
+:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.list-filter {
+  left: 0;
+  width: 200px;
+}
+
+.group-filter {
+  left: 200px;
+  width: 240px;
+}
+
+.friends {
+  left: 440px;
+  right: 200px;
+}
+
+.assign {
+  width: 200px;
+  right: 0;
+}
+.assign h2, .assign .listbox-contents {
+  border-right: 0;
+}
+
+.filter .listbox-contents {
+  bottom: 52px;
+}
+.filter .filter-options {
+  position: absolute;
+  height: 52px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: #1c1a19;
+  border-right: 1px solid #444240;
+}
+
+.list-item, .check-option {
+  padding: 3px 10px;
+  line-height: 20px;
+}
+
+.filter-item {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.friend-item.selected {
+  background: #4a8bac;
+}
+.friend-item img, .friend-item span {
+  vertical-align: middle;
+}
+.friend-item span {
+  margin-left: 10px;
+  font-size: 1.11em;
+}
+
+.filter-item, .check-option, .fl-item {
+  background-image: url('../images/check.png?1302067647');
+  padding-left: 28px;
+  background-position: center left;
+  background-repeat: no-repeat;
+}
+.filter-item.checked, .check-option.checked, .fl-item.checked {
+  background-image: url('../images/checked.png?1302067647');
+}
+.filter-item.disabled, .check-option.disabled, .fl-item.disabled {
+  color: #666;
+}
+
+a img {
+  border: 0;
+}
