@@ -478,7 +478,7 @@ class FriendListItem extends ListItem
 		if not @app.selectedFriend
 			return ""
 		count = 0
-		count++ for mutual in @app.selectedFriend when mutual.lists.get(@node)
+		count++ for key of @app.selectedFriend.friends.data when @app.selectedFriend.friends.data[key].lists.get(@node)
 		return " (#{count})"
 	
 	action: ->
