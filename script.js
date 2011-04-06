@@ -677,7 +677,22 @@
       if (this.checked()) {
         addClass += " checked";
       }
-      return "<div data-friend=\"" + (this.app.selectedFriend ? this.app.selectedFriend.key : "NA") + "\" data-fl=\"" + this.node.key + "\" class=\"list-item fl-item" + addClass + "\">\n	" + this.node.data.name + "\n</div>";
+      return "<div data-friend=\"" + (this.app.selectedFriend ? this.app.selectedFriend.key : "NA") + "\" data-fl=\"" + this.node.key + "\" class=\"list-item fl-item" + addClass + "\">\n	" + this.node.data.name + "\n	" + (this.calculate()) + "\n</div>";
+    };
+    FriendListItem.prototype.calculate = function() {
+      var count, mutual, _i, _len, _ref;
+      if (!this.app.selectedFriend) {
+        return "";
+      }
+      count = 0;
+      _ref = this.app.selectedFriend;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        mutual = _ref[_i];
+        if (mutual.lists.get(this.node)) {
+          count++;
+        }
+      }
+      return " (" + count + ")";
     };
     FriendListItem.prototype.action = function() {
       var proc;

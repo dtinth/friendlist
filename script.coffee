@@ -470,8 +470,16 @@ class FriendListItem extends ListItem
 		"""
 			<div data-friend="#{if @app.selectedFriend then @app.selectedFriend.key else "NA"}" data-fl="#{@node.key}" class="list-item fl-item#{addClass}">
 				#{@node.data.name}
+				#{@calculate()}
 			</div>
 		"""
+	
+	calculate: ->
+		if not @app.selectedFriend
+			return ""
+		count = 0
+		count++ for mutual in @app.selectedFriend when mutual.lists.get(@node)
+		return " (#{count})"
 	
 	action: ->
 		if not @disabled()
