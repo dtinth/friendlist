@@ -802,6 +802,7 @@
       this.link = this.element.find('a');
       this.link.html(message);
       this.link.click(this.proxy('login'));
+      this.element.appendTo(document.body);
     }
     Login.prototype.login = function() {
       this.element.remove();

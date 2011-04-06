@@ -539,6 +539,7 @@ class Login extends Component
 		@link = @element.find 'a'
 		@link.html message
 		@link.click @proxy('login')
+		@element.appendTo document.body
 
 	login: ->
 		@element.remove()
