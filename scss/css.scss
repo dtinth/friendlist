@@ -93,13 +93,27 @@ html, body {
 	white-space: nowrap;
 }
 .friend-item {
-	&.selected {
-		background: #4a8bac;
-	}
-	img, span {
+	img, .name {
 		vertical-align: middle;
 	}
-	span { margin-left: 10px; font-size: 1.11em; }
+	.name {
+		padding-left: 10px;
+		font-size: 1.11em;
+		.grouplist {
+			color: #def;
+			font-size: 0.8em;
+			padding-left: 10px;
+			display: none;
+		}
+	}
+	&.selected {
+		background: #4a8bac;
+		.name {
+			.grouplist {
+				display: inline;
+			}
+		}
+	}
 }
 .filter-item, .check-option, .fl-item {
 	background-image: image-url('check.png');
@@ -112,6 +126,25 @@ html, body {
 	&.disabled {
 		color: #666;
 	}
+	.score {
+		color: #999;
+		display: inline-block;
+		width: 1.8em;
+		line-height: normal;
+		text-align: right;
+		font-size: 0.9em;
+		font-weight: bold;
+		padding-right: 1ex;
+	}
+	&.major {
+		.score {
+			color: #eee;
+		}
+	}
+}
+.fl-item {
+	overflow: hidden;
+	white-space: nowrap;
 }
 a img {
 	border: 0;

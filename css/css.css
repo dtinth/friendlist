@@ -102,15 +102,24 @@ html, body {
   white-space: nowrap;
 }
 
+.friend-item img, .friend-item .name {
+  vertical-align: middle;
+}
+.friend-item .name {
+  padding-left: 10px;
+  font-size: 1.11em;
+}
+.friend-item .name .grouplist {
+  color: #def;
+  font-size: 0.8em;
+  padding-left: 10px;
+  display: none;
+}
 .friend-item.selected {
   background: #4a8bac;
 }
-.friend-item img, .friend-item span {
-  vertical-align: middle;
-}
-.friend-item span {
-  margin-left: 10px;
-  font-size: 1.11em;
+.friend-item.selected .name .grouplist {
+  display: inline;
 }
 
 .filter-item, .check-option, .fl-item {
@@ -124,6 +133,24 @@ html, body {
 }
 .filter-item.disabled, .check-option.disabled, .fl-item.disabled {
   color: #666;
+}
+.filter-item .score, .check-option .score, .fl-item .score {
+  color: #999;
+  display: inline-block;
+  width: 1.8em;
+  line-height: normal;
+  text-align: right;
+  font-size: 0.9em;
+  font-weight: bold;
+  padding-right: 1ex;
+}
+.filter-item.major .score, .check-option.major .score, .fl-item.major .score {
+  color: #eee;
+}
+
+.fl-item {
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 a img {

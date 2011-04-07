@@ -599,7 +599,30 @@
       this.node = node;
     }
     FriendItem.prototype.render = function() {
-      return "<div data-friend=\"" + this.node.key + "\" class=\"list-item friend-item" + (this.node === this.app.selectedFriend ? " selected" : "") + "\">\n	<a href=\"" + this.node.data.profile_url + "\"><img alt=\"(Profile Picture)\" width=\"44\" height=\"44\" src=\"" + this.node.data.pic_square + "\"></a>\n	<span>" + this.node.data.name + "</span>\n</div>";
+      return "<div data-friend=\"" + this.node.key + "\" class=\"list-item friend-item" + (this.node === this.app.selectedFriend ? " selected" : "") + "\">\n	<table cellpadding=\"0\" cellspacing=\"0\">\n		<tr>\n			<td>\n				<a href=\"" + this.node.data.profile_url + "\"><img alt=\"(Profile Picture)\" width=\"44\" height=\"44\" src=\"" + this.node.data.pic_square + "\"></a>\n			</td>\n			<td class=\"name\">" + this.node.data.name + (this.groups()) + "</td>\n		</tr>\n	</table>\n</div>";
+    };
+    FriendItem.prototype.groups = function() {
+      var group, groups, key;
+      groups = (function() {
+        var _results;
+        _results = [];
+        for (key in this.node.groups.data) {
+          _results.push(this.node.groups.data[key]);
+        }
+        return _results;
+      }).call(this);
+      if (groups.length === 0) {
+        return "";
+      }
+      return "<span class=\"grouplist\"> " + (((function() {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = groups.length; _i < _len; _i++) {
+          group = groups[_i];
+          _results.push("<span class=\"group\">" + group.data.name + "</span>");
+        }
+        return _results;
+      })()).join(', ')) + "</span>";
     };
     FriendItem.prototype.action = function() {
       return this.app.selectFriend(this.node);
@@ -669,7 +692,7 @@
       return this.app.selectedFriend && this.app.selectedFriend.lists.get(this.node);
     };
     FriendListItem.prototype.render = function() {
-      var addClass;
+      var addClass, majority, score, _ref;
       addClass = "";
       if (this.disabled()) {
         addClass += " disabled";
@@ -677,20 +700,22 @@
       if (this.checked()) {
         addClass += " checked";
       }
-      return "<div data-friend=\"" + (this.app.selectedFriend ? this.app.selectedFriend.key : "NA") + "\" data-fl=\"" + this.node.key + "\" class=\"list-item fl-item" + addClass + "\">\n	" + this.node.data.name + "\n	" + (this.calculate()) + "\n</div>";
+      _ref = this.getScore(), score = _ref[0], majority = _ref[1];
+      return "<div data-friend=\"" + (this.app.selectedFriend ? this.app.selectedFriend.key : "NA") + "\" data-fl=\"" + this.node.key + "\" class=\"list-item fl-item" + addClass + (majority ? " major" : "") + "\">\n	<span class=\"score\">" + score + "</span><span class=\"name\">" + this.node.data.name + "</span>\n</div>";
     };
-    FriendListItem.prototype.calculate = function() {
-      var count, key;
+    FriendListItem.prototype.getScore = function() {
+      var score;
       if (!this.app.selectedFriend) {
-        return "";
+        return ["", false];
       }
-      count = 0;
-      for (key in this.app.selectedFriend.friends.data) {
-        if (this.app.selectedFriend.friends.data[key].lists.get(this.node)) {
-          count++;
-        }
+      score = 0;
+      if (this.node.key in this.app.listScore) {
+        score = this.app.listScore[this.node.key];
       }
-      return " (" + count + ")";
+      if (score === 0) {
+        return ["", false];
+      }
+      return ["" + score, score > this.app.maxScore / 2];
     };
     FriendListItem.prototype.action = function() {
       var proc;
@@ -704,6 +729,8 @@
     __extends(Application, Component);
     function Application() {
       this.db = new Database;
+      this.listScore = {};
+      this.maxScore = 0;
     }
     Application.prototype.run = function() {
       var loader, progress;
@@ -801,8 +828,36 @@
       oldSelectedFriend = this.selectedFriend;
       this.selectedFriend = node;
       this.updateFriend(oldSelectedFriend);
+      this.calculateMutualFriendLists();
       this.updateFriend(this.selectedFriend);
       return this.assignList.update();
+    };
+    Application.prototype.calculateMutualFriendLists = function() {
+      var flkey, friend, friends, key, node, _results;
+      node = this.selectedFriend;
+      if (!node) {
+        return;
+      }
+      this.listScore = {};
+      this.maxScore = 0;
+      friends = node.friends;
+      _results = [];
+      for (key in friends.data) {
+        friend = friends.data[key];
+        _results.push((function() {
+          var _results;
+          _results = [];
+          for (flkey in friend.lists.data) {
+            if (!(flkey in this.listScore)) {
+              this.listScore[flkey] = 0;
+            }
+            this.listScore[flkey]++;
+            _results.push(this.listScore[flkey] > this.maxScore ? this.maxScore = this.listScore[flkey] : void 0);
+          }
+          return _results;
+        }).call(this));
+      }
+      return _results;
     };
     return Application;
   })();

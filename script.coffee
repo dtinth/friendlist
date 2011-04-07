@@ -407,11 +407,25 @@ class FriendItem extends ListItem
 	render: ->
 		"""
 			<div data-friend="#{@node.key}" class="list-item friend-item#{if @node == @app.selectedFriend then " selected" else ""}">
-				<a href="#{@node.data.profile_url}"><img alt="(Profile Picture)" width="44" height="44" src="#{@node.data.pic_square}"></a>
-				<span>#{@node.data.name}</span>
+				<table cellpadding="0" cellspacing="0">
+					<tr>
+						<td>
+							<a href="#{@node.data.profile_url}"><img alt="(Profile Picture)" width="44" height="44" src="#{@node.data.pic_square}"></a>
+						</td>
+						<td class="name">#{@node.data.name}#{@groups()}</td>
+					</tr>
+				</table>
 			</div>
 		"""
 	
+	groups: ->
+		groups = (@node.groups.data[key] for key of @node.groups.data)
+		if groups.length == 0
+			return ""
+		return """
+			<span class="grouplist"> #{("<span class=\"group\">#{group.data.name}</span>" for group in groups).join(', ')}</span>
+		"""
+
 	action: ->
 		@app.selectFriend @node
 
@@ -467,19 +481,25 @@ class FriendListItem extends ListItem
 		addClass = ""
 		addClass += " disabled" if @disabled()
 		addClass += " checked" if @checked()
+		[score, majority] = @getScore()
 		"""
-			<div data-friend="#{if @app.selectedFriend then @app.selectedFriend.key else "NA"}" data-fl="#{@node.key}" class="list-item fl-item#{addClass}">
-				#{@node.data.name}
-				#{@calculate()}
+			<div data-friend="#{if @app.selectedFriend then @app.selectedFriend.key else "NA"}" data-fl="#{@node.key}" class="list-item fl-item#{addClass}#{if majority then " major" else ""}">
+				<span class="score">#{score}</span><span class="name">#{@node.data.name}</span>
 			</div>
 		"""
 	
-	calculate: ->
+	getScore: ->
 		if not @app.selectedFriend
-			return ""
-		count = 0
-		count++ for key of @app.selectedFriend.friends.data when @app.selectedFriend.friends.data[key].lists.get(@node)
-		return " (#{count})"
+			return ["", false]
+		score = 0
+		if @node.key of @app.listScore
+			score = @app.listScore[@node.key]
+		if score == 0
+			return ["", false]
+		return [
+			"""#{score}"""
+			score > @app.maxScore / 2
+		]
 	
 	action: ->
 		if not @disabled()
@@ -488,7 +508,9 @@ class FriendListItem extends ListItem
 class Application extends Component
 
 	constructor: ->
-		@db = new Database
+		@db        = new Database
+		@listScore = {}
+		@maxScore  = 0
 
 	run: ->
 		loader   = new DataLoader(@db)
@@ -535,8 +557,26 @@ class Application extends Component
 		oldSelectedFriend = @selectedFriend
 		@selectedFriend = node
 		@updateFriend(oldSelectedFriend)
+		@calculateMutualFriendLists()
 		@updateFriend(@selectedFriend)
 		@assignList.update()
+	
+	calculateMutualFriendLists: ->
+		node = @selectedFriend
+		if not node
+			return
+		@listScore = {}
+		@maxScore  = 0
+		friends = node.friends
+		for key of friends.data
+			friend = friends.data[key]
+			for flkey of friend.lists.data
+				if not (flkey of @listScore)
+					@listScore[flkey] = 0
+				@listScore[flkey]++
+				if @listScore[flkey] > @maxScore
+					@maxScore = @listScore[flkey]
+
 
 REQUIRED_PERMISSIONS = 'user_groups,friends_groups,read_friendlists,manage_friendlists,user_checkins,friends_checkins'
 
