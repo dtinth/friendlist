@@ -615,7 +615,14 @@ class Bootstrapper extends Component
 	
 	checkPermission: (perms) ->
 		required = REQUIRED_PERMISSIONS.split ','
-		available = perms.split ','
+		if perms.substr(0, 1) in ["{", "}"]
+			data = eval('(' + perms + ')')
+			available = []
+			for k, v of data
+				for vv in v
+					available.push vv
+		else
+			available = perms.split ','
 		if not available?
 			return true
 		for perm in required

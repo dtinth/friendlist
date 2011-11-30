@@ -1120,12 +1120,24 @@
     };
 
     Bootstrapper.prototype.checkPermission = function(perms) {
-      var available, perm, required, _i, _len;
+      var available, data, k, perm, required, v, vv, _i, _j, _len, _len2, _ref;
       required = REQUIRED_PERMISSIONS.split(',');
-      available = perms.split(',');
+      if ((_ref = perms.substr(0, 1)) === "{" || _ref === "}") {
+        data = eval('(' + perms + ')');
+        available = [];
+        for (k in data) {
+          v = data[k];
+          for (_i = 0, _len = v.length; _i < _len; _i++) {
+            vv = v[_i];
+            available.push(vv);
+          }
+        }
+      } else {
+        available = perms.split(',');
+      }
       if (!(available != null)) return true;
-      for (_i = 0, _len = required.length; _i < _len; _i++) {
-        perm = required[_i];
+      for (_j = 0, _len2 = required.length; _j < _len2; _j++) {
+        perm = required[_j];
         if (!(__indexOf.call(available, perm) >= 0)) return false;
       }
       return true;
