@@ -217,11 +217,9 @@ class DataLoader extends Component
 
 class LoadProgressView extends Component
 
-	constructor: (@loader) ->
-		@element = $ '<div class="loading"><div class="message"></div></div>'
+	constructor: (title) ->
+		@element = $ '<div class="loading"><b>' + title + ':</b> <span class="message"></span></div>'
 		@message = @element.find '.message'
-		@loader.listen 'status', @proxy('status')
-		@loader.listen 'finish', @proxy('finish')
 		@element.appendTo document.body
 
 	status: (message) ->
@@ -514,7 +512,9 @@ class Application extends Component
 
 	run: ->
 		loader   = new DataLoader(@db)
-		progress = new LoadProgressView(loader)
+		progress = new LoadProgressView('Loading')
+		loader.listen 'status', progress.proxy('status')
+		loader.listen 'finish', progress.proxy('finish')
 		loader.listen 'finish', @proxy('loaded')
 		loader.load()
 	
@@ -582,7 +582,7 @@ REQUIRED_PERMISSIONS = 'user_groups,friends_groups,read_friendlists,manage_frien
 
 class Login extends Component
 
-	constructor: (@callback, message) ->
+	constructor: (@callback, message, @onclick) ->
 		@element = $('<div id="login"><a href="javascript://"></a></div>')
 		@link = @element.find 'a'
 		@link.html message
@@ -591,14 +591,20 @@ class Login extends Component
 
 	login: ->
 		@element.remove()
+		@onclick()
 		FB.login @callback, { perms: REQUIRED_PERMISSIONS }
 
 class Bootstrapper extends Component
 
 	constructor: ->
+		@initprogress = new LoadProgressView('Initializing')
+		@initprogress.status 'Getting Facebook Session'
 		FB.getLoginStatus @proxy('gotSession')
 	
 	gotSession: (response) ->
+		if @initprogress
+			@initprogress.finish()
+			delete @initprogress
 		if response.session
 			if @checkPermission response.perms
 				@initializeApp()
@@ -609,14 +615,12 @@ class Bootstrapper extends Component
 	
 	checkPermission: (perms) ->
 		required = REQUIRED_PERMISSIONS.split ','
-		available = eval('(' + perms + ')')
+		available = perms.split ','
 		if not available?
 			return true
 		for perm in required
-			if not (perm in available.extended)
-				if not (perm in available.user)
-					if not (perm in available.friends)
-						return false
+			if not (perm in available)
+				return false
 		return true
 
 	initializeApp: ->
@@ -624,8 +628,13 @@ class Bootstrapper extends Component
 		window.app = app
 		app.run()
 
+	displayNext: ->
+		if not @initprogress
+			@initprogress = new LoadProgressView('Waiting')
+		@initprogress.status 'Waiting for session from Facebook.<br><br>If it doesn\'t continue, please refresh this page.'
+
 	showLogin: (message) ->
-		new Login(@proxy('gotSession'), message)
+		new Login(@proxy('gotSession'), message, @proxy('displayNext'))
 
 class AccessibilityHelper extends Component
 
