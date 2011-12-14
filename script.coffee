@@ -592,7 +592,7 @@ class Login extends Component
 	login: ->
 		@element.remove()
 		@onclick()
-		FB.login @callback, { perms: REQUIRED_PERMISSIONS }
+		FB.login @callback, { scope: REQUIRED_PERMISSIONS }
 
 class Bootstrapper extends Component
 

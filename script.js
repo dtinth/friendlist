@@ -1085,7 +1085,7 @@
       this.element.remove();
       this.onclick();
       return FB.login(this.callback, {
-        perms: REQUIRED_PERMISSIONS
+        scope: REQUIRED_PERMISSIONS
       });
     };
 
