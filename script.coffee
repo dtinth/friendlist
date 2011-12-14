@@ -605,8 +605,8 @@ class Bootstrapper extends Component
 		if @initprogress
 			@initprogress.finish()
 			delete @initprogress
-		if response.session
-			if @checkPermission response.scope
+		if response.authResponse
+			if true # @checkPermission response.scope
 				@initializeApp()
 			else
 				@showLogin "Set Permissions"
