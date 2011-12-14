@@ -1109,7 +1109,7 @@
         delete this.initprogress;
       }
       if (response.session) {
-        if (this.checkPermission(response.perms)) {
+        if (this.checkPermission(response.scope)) {
           return this.initializeApp();
         } else {
           return this.showLogin("Set Permissions");
