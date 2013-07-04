@@ -1,0 +1,9 @@
+{
+  "name": "sticky",
+  "version": "0.0.0",
+  "commit": "c1993025533a704b6e540db566b4b45eae342ffa",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/garand/sticky.git"
+  }
+}
