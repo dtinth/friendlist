@@ -4,7 +4,7 @@
   <h1>Friendlist</h1>
   <p>This app helps you manage your friend list.</p>
   <p>Please connect this application with Facebook to start using Friendlist.</p>
-  <p><a class="btn btn-primary btn-large">Connect with Facebook!!</a></p>
+  <p><a ng-click="facebook.login()" class="btn btn-primary btn-large">Connect with Facebook!!</a></p>
 </div>
 
 <div ng-if="facebook.connected">
