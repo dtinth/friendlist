@@ -1,0 +1,71 @@
+<div class="hero-unit" ng-show="!facebook.connected">
+  <h1>Friendlist</h1>
+  <p>This app helps you manage your friend list.</p>
+  <p>Please connect this application with Facebook to start using Friendlist.</p>
+  <p><a ng-click="facebook.login()" class="btn btn-primary btn-large">Connect with Facebook!!</a></p>
+</div>
+
+<div ng-if="facebook.connected">
+  <div ng-if="!reallyConnected">
+    <h2>Loading User Information</h2>
+  </div>
+  <div id="search" ng-if="reallyConnected">
+    <h2>Query Friends</h2>
+    <div class="well the-predicate">
+      Search for friends where <b>all</b> of these conditions are met:
+      <div predicate-editor="predicates" class="main-predicate"></div>
+      <button ng-disabled="!validatePredicates(predicates)" ng-click="executeQuery(predicates)" class="btn btn-primary"><b>Query Friends</b></button>
+      <button ng-disabled="!validatePredicates(predicates)" ng-click="fql = generateFql(predicates)" class="btn">Generate FQL</button>
+    </div>
+    <pre ng-show="fql">{{fql}}<br><br><button class="btn" ng-click="fql=''">Close</button></pre>
+  </div>
+</div>
+
+<div ng-hide="query.dummy">
+  <div ng-show="query.running" flm-progress-bar=""></div>
+  <div ng-if="query.value">
+    <div sticky="" class="result-bar">
+      <div class="navbar">
+        <div class="navbar-inner">
+          <div class="container">
+            <div class="pull-left">
+              <a class="brand" href="javascript://">Search Results</a>
+              <button class="btn" ng-click="query.refresh()"><i class="icon-refresh"></i></button>
+              <button class="btn" ng-disabled="countCheck() == query.value.length" ng-click="checkAll(true)">Check All</button>
+              <button class="btn" ng-disabled="countCheck() == 0" ng-click="checkAll(false)">Uncheck All</button>
+            </div>
+            <div class="pull-right">
+              <span class="action-text">With checked ({{countCheck()}})</span>
+              <div class="actions">
+                <wtf flm-progress-bar="" ng-show="action.running"></wtf>
+              </div>
+              <span ng-hide="action.running">
+                <button class="btn" ng-click="listOperation('POST')" ng-disabled="!action.list">Add to</button>
+                <button class="btn" ng-click="listOperation('DELETE')" ng-disabled="!action.list">Remove from</button>
+              </span>
+              <div class="actions" ng-repeat="list in [flm.list()]">
+                <wtf flm-progress-bar="" ng-show="list.running"></wtf>
+                <wtf ng-if="!list.running">
+                  <select ui-select2="{ placeholder: 'select a list' }" ng-model="action.list" class="select-friendlist">
+                    <option ng-repeat="friendlist in list.value" value="{{friendlist.flid}}" data-type="{{friendlist.type}}">{{friendlist.name}}</option>
+                  </select>
+                </wtf>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <table class="table table-bordered query-result">
+      <tr ng-repeat="user in query.value" ng-click="user.checked = !user.checked" ng-class="{ user: true, checked: user.checked, 'action-performed': user.actions.length > 0 }">
+        <td class="pic"><img ng-src="https://graph.facebook.com/{{user.uid}}/picture" alt="{{user.name}}"></td>
+        <td class="name">
+          <span ng-bind-html-unsafe="flm.userLink(user.uid)"></span>
+        </td>
+        <td class="check">
+          <span ng-show="user.checked"><i class="icon-ok"></i></span>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

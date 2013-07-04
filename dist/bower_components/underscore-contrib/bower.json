@@ -1,0 +1,8 @@
+{
+  "name": "underscore-contrib",
+  "version": "0.1.4",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/documentcloud/underscore-contrib.git"
+  }
+}
