@@ -62,6 +62,11 @@ module.exports = function (grunt) {
         ]
       }
     },
+    exec: {
+      deploy: {
+        command: 'git subtree push --prefix dist origin gh-pages'
+      }
+    },
     connect: {
       options: {
         port: 9000,
@@ -328,6 +333,10 @@ module.exports = function (grunt) {
       'watch'
     ]);
   });
+
+  grunt.registerTask('deploy', [
+    'exec'
+  ])
 
   grunt.registerTask('test', [
     'clean:server',
