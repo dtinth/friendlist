@@ -1,0 +1,21 @@
+{
+  "name": "friendlist2",
+  "version": "0.0.0",
+  "dependencies": {
+    "angular": "PatternConsulting/bower-angular",
+    "json3": "~3.2.4",
+    "jquery": "~1.9.1",
+    "bootstrap-sass": "~2.3.1",
+    "es5-shim": "~2.0.8",
+    "angular-sanitize": "~1.0.7",
+    "underscore": "~1.4.4",
+    "angular-ui-select2": "~0.0.2",
+    "underscore-contrib": "documentcloud/underscore-contrib#~0.1.4",
+    "angular-unstable": "~1.1.5",
+    "sticky": "garand/sticky"
+  },
+  "devDependencies": {
+    "angular-mocks": "~1.0.7",
+    "angular-scenario": "~1.0.7"
+  }
+}

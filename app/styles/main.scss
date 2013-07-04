@@ -1,0 +1,119 @@
+
+$iconSpritePath: '../bower_components/bootstrap-sass/img/glyphicons-halflings.png';
+$iconWhiteSpritePath: '../bower_components/bootstrap-sass/img/glyphicons-halflings-white.png';
+
+@import "bootstrap-sass/lib/bootstrap";
+@import "bootstrap-sass/lib/responsive";
+@import "../bower_components/select2/select2.css";
+
+html, body {
+  margin: 20px;
+}
+
+@media (max-width: 720px) {
+  html, body {
+    margin: 10px 3px;
+  }
+}
+
+.predicate {
+  border-top: 1px solid #bbb;
+  padding-top: 6px;
+  clear: both;
+}
+.predicate-main {
+  padding-bottom: 6px;
+}
+
+.list-selector, .group-selector {
+  display: inline-block;
+}
+
+.main-predicate {
+  margin-bottom: 6px;
+}
+.sub-predicate {
+  margin-left: 48px;
+}
+
+.the-predicate {
+  max-width: 640px;
+}
+
+.predicate-selector {
+  width: 10em;
+}
+
+.loading {
+  width: 224px;
+}
+
+.predicate {
+  .loading {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0;
+  }
+}
+
+.select-friendlist, .select-group {
+  width: 224px;
+}
+
+table.query-result {
+  td.pic {
+    padding: 0;
+    width: 48px;
+    img {
+      width: 48px;
+      height: 48px;
+    }
+  }
+  td {
+    vertical-align: middle;
+  }
+  td.check {
+    width: 48px;
+    text-align: center;
+  }
+  tr.checked td {
+    background: #ffc;
+  }
+  tr.action-performed td {
+    background: #eee;
+    color: #999;
+    a {
+      color: #aaa;
+    }
+    img {
+      opacity: 0.3;
+    }
+  }
+  tr.checked td.check {
+    background: #ffc;
+  }
+}
+
+.is-sticky .result-bar {
+  left: 0;
+  right: 0;
+  .navbar-inner {
+    border-radius: 0;
+  }
+}
+
+.result-bar {
+  .actions {
+    margin-top: 6px;
+    display: inline-block;
+    vertical-align: top;
+  }
+  .action-text {
+    padding: 10px 5px 10px;
+    display: inline-block;
+    vertical-align: top;
+  }
+}
+
+
+
