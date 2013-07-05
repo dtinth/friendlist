@@ -22,34 +22,42 @@ var selectors = {
   inList: {
     text: 'In list',
     ui: 'list',
-    validate: _c.get('list', _c.get('options')),
+    validate: It.get('options').get('list'),
     fql: Predicate.compile('uid IN (SELECT uid FROM friendlist_member WHERE flid = {{list}})'),
     order: 1
   },
   notInList: {
     text: 'Not in list',
     ui: 'list',
-    validate: _c.get('list', _c.get('options')),
+    validate: It.get('options').get('list'),
     fql: Predicate.compile('NOT (uid IN (SELECT uid FROM friendlist_member WHERE flid = {{list}}))'),
     order: 2
   },
   noUserList: {
-    text: 'Not in any list',
+    text: 'Not in user list',
     ui: 'blank',
     fql: Predicate.compile('NOT (uid IN (SELECT uid FROM friendlist_member WHERE flid IN (SELECT flid FROM friendlist WHERE owner = me() AND type = \'user_created\')))'),
     order: 4
   },
+  noList: {
+    text: 'Not in any list',
+    ui: 'blank',
+    fql: Predicate.compile('NOT (uid IN (SELECT uid FROM friendlist_member WHERE flid IN (SELECT flid FROM friendlist WHERE owner = me())))'),
+    order: 5
+  },
   inGroup: {
     text: 'In group',
     ui: 'group',
+    validate: It.get('options').get('group'),
     fql: Predicate.compile('uid IN (SELECT uid FROM group_member WHERE gid = {{group}})'),
     order: 10
   },
   notInGroup: {
     text: 'Not in group',
     ui: 'group',
+    validate: It.get('options').get('group'),
     fql: Predicate.compile('NOT (uid IN (SELECT uid FROM group_member WHERE gid = {{group}}))'),
-    order: 10
+    order: 11
   },
   any: {
     text: 'Any of These',
@@ -59,7 +67,7 @@ var selectors = {
       return Predicate.validate(pred.children)
     },
     fql: function(pred) {
-      return _.map(pred.children, _c.call('fql')).map(brackets).join('\nOR ')
+      return _.map(pred.children, It.send('fql')).map(brackets).join('\nOR ')
     },
     order: 100
   }
@@ -86,11 +94,11 @@ var selectors = {
 }(Predicate.prototype))
 
 Predicate.validate = function(array) {
-  return _.every(array, _c.call('validate'))
+  return _.every(array, It.send('validate'))
 }
 
 Predicate.fql = function(array) {
-  return _.map(array, _c.call('fql')).map(brackets).join('\nAND ')
+  return _.map(array, It.send('fql')).map(brackets).join('\nAND ')
 }
 
 function Dynamic(task) {

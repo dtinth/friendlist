@@ -12,7 +12,8 @@
     "angular-ui-select2": "~0.0.2",
     "underscore-contrib": "documentcloud/underscore-contrib#~0.1.4",
     "angular-unstable": "~1.1.5",
-    "sticky": "garand/sticky"
+    "sticky": "garand/sticky",
+    "it.js": "dtinth/it.js#~0.3.0"
   },
   "devDependencies": {
     "angular-mocks": "~1.0.7",

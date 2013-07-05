@@ -10,7 +10,7 @@ angular.module('friendlist2.directives', ['friendlist2.models', 'friendlist2.fb'
     })
 
     var selectorModel = sortSelectorModel(makeSelectorModel(selectors))
-    var nonChildrenSelectorModel = _.filter(selectorModel, _c.not(_c.get('children', _c.get('real'))))
+    var nonChildrenSelectorModel = _.filter(selectorModel, It.not(It.get('real').get('children')))
 
     return {
       restrict: 'A',

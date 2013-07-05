@@ -24,44 +24,6 @@ _c = (function() {
   out.each = wrap(_.each)
   out.each(attach(_))(['map', 'sortBy', 'filter'])
 
-  out.get = function(key, it) {
-    if (!it) it = _.identity
-    return function(x) {
-      return it(x)[key]
-    }
-  }
-  out.call = function(key, it) {
-    if (!it) it = _.identity
-    return function(x) {
-      return it(x)[key]()
-    }
-  }
-  out.set = function(key, value, it) {
-    if (!it) it = _.identity
-    return function(x) {
-      var ref = it(x)
-      ref[key] = value
-      return ref
-    }
-  }
-  out.not = function(fn) {
-    return function(x) {
-      return !fn(x)
-    }
-  }
-  out.indexIn = function(array, it) {
-    if (!it) it = _.identity
-    return function(item) {
-      return _.indexOf(array, it(item))
-    }
-  }
-  out.makeInstance = function(Constructor, it) {
-    if (!it) it = _.identity
-    return function(x) {
-      return new Constructor(it(x))
-    }
-  }
-
   return out
 
 }())

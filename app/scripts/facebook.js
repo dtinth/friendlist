@@ -102,7 +102,7 @@ angular.module('friendlist2.fb', ['friendlist2.models'])
         if (dynamic) callback(dynamic)
       }
       fn.refresh = function() {
-        return fn.maybe(_c.call('refresh'))
+        return fn.maybe(It.send('refresh'))
       }
       return fn
     }
@@ -110,8 +110,8 @@ angular.module('friendlist2.fb', ['friendlist2.models'])
     manager.list = lazy(sessionCache('lists', function() {
       return facebook.fql('SELECT flid, name, type FROM friendlist WHERE owner = me() ORDER BY name')
         .then(function(list) {
-          var order = ['close_friends', 'acquaintances', 'work', 'education', 'current_city', 'family', 'user_created']
-          return _c.sortBy(_c.indexIn(order, _c.get('type')))(list)
+          var order = ['close_friends', 'acquaintances', 'work', 'education', 'current_city', 'family', 'user_created', 'restricted']
+          return _c.sortBy(It.get('type').compose(_.partial(_.indexOf, order)))(list)
         })
     }))
 

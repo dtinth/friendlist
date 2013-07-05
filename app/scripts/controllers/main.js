@@ -53,17 +53,17 @@ angular.module('friendlist2.app')
       })
       $scope.query = new Dynamic(function(force) {
         return query(force).then(function(data) {
-          return data.map(_c.makeInstance(Result))
+          return data.map(It.instantiate(Result))
         })
       })
     }
 
     $scope.checkAll = function(check) {
-      _.each($scope.query.value, _c.set('checked', check))
+      _.each($scope.query.value, It.set('checked', check))
     }
 
     function getSelectedUsers() {
-      return _.filter($scope.query.value, _c.get('checked'))
+      return _.filter($scope.query.value, It.get('checked'))
     }
 
     $scope.countCheck = function() {
@@ -75,7 +75,7 @@ angular.module('friendlist2.app')
       var selected = getSelectedUsers()
       var url = '/' + $scope.action.list + '/members'
       var action = { method: method, list: $scope.action.list }
-      var ids = _.map(selected, _c.get('uid'))
+      var ids = _.map(selected, It.get('uid'))
       function done() {
         $scope.action.running = false
         _.each(selected, function(user) {
